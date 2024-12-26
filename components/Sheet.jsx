@@ -14,18 +14,21 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { auth } from "@/auth";
 
 
-const SheetComponent = () => {
+const SheetComponent = async () => {
+      const session = await auth();
+      const user = session?.user;
     return (
         <Sheet>
             <SheetTrigger>
                 <TooltipProvider>
                     <Tooltip>
                         <TooltipTrigger>
-                            <Avatar className="cursor-pointer">
-                                <AvatarImage src="https://github.com/shadcn.png" />
-                            </Avatar>
+                            {user ? <Avatar className="cursor-pointer">
+                                <AvatarImage src={user.image} />
+                            </Avatar>:""}
                         </TooltipTrigger>
                         <TooltipContent>
                             <p>Profile</p>
