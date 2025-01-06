@@ -1,7 +1,7 @@
-import { Home, LogIn, LogOut, Users } from 'lucide-react'
+import { Home, LogIn, Users } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
-import { auth, signIn, signOut } from "@/auth"
+import { auth, signIn } from "@/auth"
 
 import {
   Tooltip,
@@ -17,9 +17,10 @@ import { ModeToggle } from './ModeToggler'
 const Navbar = async () => {
   const session = await auth();
   const user = session?.user;
-  
+
+
   return (
-    <nav className='container flex justify-between p-4 shadow-lg blur-10 item-center dark:shadow-gray-900'>
+    <nav style={{ maxWidth: "100vw" }} className='container flex justify-between p-4 shadow-lg blur-10 item-center dark:shadow-gray-900'>
       <div className='flex items-center'>
         <h2 className='font-bold'>NEXT.JS APP</h2>
       </div>
@@ -27,7 +28,7 @@ const Navbar = async () => {
       <div className='flex space-x-5 items-center'>
         <ModeToggle />
 
-{/* home link */}
+        {/* home link */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
@@ -40,7 +41,8 @@ const Navbar = async () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-{/* search button */}
+
+        {/* search button */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
@@ -53,18 +55,20 @@ const Navbar = async () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-{/* login button */}
+
+        {/* login button */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-                {user ? <SignOutButton />:<SignInButton/>}
+              {!user && <SignInButton />}
             </TooltipTrigger>
             <TooltipContent>
               <p>{user ? "Logout" : "Login"}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-{/* drawer sheet */}
+
+        {/* drawer sheet */}
         <SheetComponent />
 
       </div>
@@ -76,7 +80,7 @@ const Navbar = async () => {
 export default Navbar
 
 
- 
+
 export function SignInButton() {
   return (
     <form
@@ -85,20 +89,7 @@ export function SignInButton() {
         await signIn()
       }}
     >
-      <button type="submit"><LogIn/></button>
+      <button type="submit"><LogIn /></button>
     </form>
   )
-} 
-
-export function SignOutButton() {
-  return (
-    <form
-      action={async () => {
-        "use server"
-        await signOut()
-      }}
-    >
-      <button type="submit"><LogOut/></button>
-    </form>
-  )
-} 
+}
