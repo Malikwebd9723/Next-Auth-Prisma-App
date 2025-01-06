@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 const prismaClientSingleton = () => {
-  return new PrismaClient(); // No need to pass provider or URL here
+  return new PrismaClient();
 };
 
 declare global {

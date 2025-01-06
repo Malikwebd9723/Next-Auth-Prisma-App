@@ -1,6 +1,7 @@
-import { Home, LogIn, Search } from 'lucide-react'
+import { Home, LogIn, Users } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import { auth, signIn } from "@/auth"
 
 import {
   Tooltip,
@@ -13,9 +14,13 @@ import SheetComponent from './Sheet'
 import { ModeToggle } from './ModeToggler'
 
 
-const Navbar = () => {
+const Navbar = async () => {
+  const session = await auth();
+  const user = session?.user;
+
+
   return (
-    <nav className='container flex justify-between p-4 shadow-lg blur-10 item-center'>
+    <nav style={{ maxWidth: "100vw" }} className='container flex justify-between p-4 shadow-lg blur-10 item-center dark:shadow-gray-900'>
       <div className='flex items-center'>
         <h2 className='font-bold'>NEXT.JS APP</h2>
       </div>
@@ -23,7 +28,7 @@ const Navbar = () => {
       <div className='flex space-x-5 items-center'>
         <ModeToggle />
 
-{/* home link */}
+        {/* home link */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
@@ -36,31 +41,34 @@ const Navbar = () => {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-{/* search button */}
+
+        {/* search button */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Search href={"/"}>
-                <Search />
-              </Search>
+              <Link href={"/"}>
+                <Users />
+              </Link>
             </TooltipTrigger>
             <TooltipContent>
-              <p>Search</p>
+              <p>About us</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-{/* login button */}
+
+        {/* login button */}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <LogIn />
+              {!user && <SignInButton />}
             </TooltipTrigger>
             <TooltipContent>
-              <p>Login</p>
+              <p>{user ? "Logout" : "Login"}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-{/* drawer sheet */}
+
+        {/* drawer sheet */}
         <SheetComponent />
 
       </div>
@@ -70,3 +78,18 @@ const Navbar = () => {
 }
 
 export default Navbar
+
+
+
+export function SignInButton() {
+  return (
+    <form
+      action={async () => {
+        "use server"
+        await signIn()
+      }}
+    >
+      <button type="submit"><LogIn /></button>
+    </form>
+  )
+}
